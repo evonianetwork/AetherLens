@@ -36,7 +36,14 @@ jobs:
       run: |
         Invoke-WebRequest -Uri https://nmap.org/npcap/dist/npcap-sdk-1.13.zip -OutFile npcap-sdk.zip
         Expand-Archive npcap-sdk.zip -DestinationPath .
-        Rename-Item -Path "npcap-sdk-1.13" -NewName "npcap-sdk"
+        $sdkDir = Get-ChildItem -Directory | Where-Object { $_.Name -like "npcap-sdk-*" } | Select-Object -First 1
+        if ($sdkDir) {
+          if ($sdkDir.Name -ne "npcap-sdk") {
+            Rename-Item -Path $sdkDir.FullName -NewName "npcap-sdk"
+          }
+        } else {
+          Write-Error "Could not find extracted Npcap SDK directory"
+        }
 
     - name: Check Formatting
       run: cd core-engine && cargo fmt -- --check

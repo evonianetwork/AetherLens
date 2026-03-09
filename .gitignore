@@ -34,8 +34,6 @@ dist/
 # Local Configuration
 appsettings.Development.json
 .env.local
-package-lock.json
-yarn.lock
 
 # Scripts
 *.ps1
