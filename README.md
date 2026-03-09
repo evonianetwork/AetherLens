@@ -1,7 +1,7 @@
 # AetherLens 👁️
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Build Status](https://img.shields.io/github/actions/workflow/status/sehawq/aether-lens/ci.yml?branch=main)
+![Build Status](https://img.shields.io/github/actions/workflow/status/sehawq/AetherLens/ci.yml?branch=main)
 ![Rust](https://img.shields.io/badge/Core-Rust_1.80-orange.svg?logo=rust)
 ![.NET](https://img.shields.io/badge/Backend-.NET_8.0-purple.svg?logo=dotnet)
 ![Next.js](https://img.shields.io/badge/Frontend-Next.js_14-black.svg?logo=next.js)
