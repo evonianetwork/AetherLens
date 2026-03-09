@@ -65,7 +65,10 @@ pub async fn process_packets(
 
     while let Some(p) = rx.recv().await {
         if packet_count.is_multiple_of(500) {
-            eprintln!("[core-engine] Processing packet: {} -> {}", p.local_addr, p.remote_addr);
+            eprintln!(
+                "[core-engine] Processing packet: {} -> {}",
+                p.local_addr, p.remote_addr
+            );
         }
         let now_ms = SystemTime::now()
             .duration_since(UNIX_EPOCH)
@@ -106,8 +109,9 @@ pub struct SuspiciousServiceImpl {
 
 #[tonic::async_trait]
 impl SuspiciousService for SuspiciousServiceImpl {
-    type SubscribeSuspiciousStream =
-        Pin<Box<dyn tokio_stream::Stream<Item = Result<SuspiciousConnectionMessage, Status>> + Send>>;
+    type SubscribeSuspiciousStream = Pin<
+        Box<dyn tokio_stream::Stream<Item = Result<SuspiciousConnectionMessage, Status>> + Send>,
+    >;
 
     async fn subscribe_suspicious(
         &self,

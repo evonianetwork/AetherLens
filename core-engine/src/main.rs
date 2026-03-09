@@ -1,5 +1,5 @@
-use std::env;
 use dotenv::dotenv;
+use std::env;
 use tokio::sync::{broadcast, mpsc};
 use tonic::transport::Server;
 
@@ -7,9 +7,12 @@ mod engine;
 mod models;
 mod network;
 
-use engine::processor::{self, proto::{PacketMessage, SuspiciousConnectionMessage}};
-use network::stream::spawn_packet_sniffer;
+use engine::processor::{
+    self,
+    proto::{PacketMessage, SuspiciousConnectionMessage},
+};
 use network::demo_stream::spawn_demo_generator;
+use network::stream::spawn_packet_sniffer;
 
 #[tokio::main]
 async fn main() {
@@ -29,7 +32,7 @@ async fn main() {
         let host = env::var("CORE_GRPC_HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
         let addr_str = format!("{}:{}", host, port);
         let addr = addr_str.parse().expect("invalid grpc addr");
-        
+
         eprintln!("[core-engine] gRPC server listening on {addr}");
         Server::builder()
             .tcp_nodelay(true)
@@ -47,7 +50,7 @@ async fn main() {
     let demo_env = env::var("DEMO_MODE").unwrap_or_else(|_| "unset".to_string());
     let demo_env_clean = demo_env.trim();
     let demo_mode = demo_env_clean == "true" || demo_env_clean == "1";
-    
+
     eprintln!("[core-engine] Env: DEMO_MODE='{}'", demo_mode);
 
     if demo_mode {

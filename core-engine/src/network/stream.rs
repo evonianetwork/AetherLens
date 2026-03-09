@@ -62,11 +62,16 @@ async fn run_sniffer_loop(
     process_cache: ProcessCache,
 ) {
     let interfaces = datalink::interfaces();
-    
+
     eprintln!("[core-engine] --- Network Interface Discovery ---");
     for iface in &interfaces {
-         eprintln!("[core-engine] Found Interface: Name='{}', Up={}, Loopback={}, IPs={:?}", 
-             iface.name, iface.is_up(), iface.is_loopback(), iface.ips);
+        eprintln!(
+            "[core-engine] Found Interface: Name='{}', Up={}, Loopback={}, IPs={:?}",
+            iface.name,
+            iface.is_up(),
+            iface.is_loopback(),
+            iface.ips
+        );
     }
     eprintln!("[core-engine] -----------------------------------");
 
@@ -82,12 +87,27 @@ async fn run_sniffer_loop(
             .find(|iface| iface.ips.iter().any(|ip| ip.ip().to_string() == target_ip))
     } else {
         // Default behavior: prefer Wi-Fi or Ethernet
-        let mut candidates: Vec<_> = interfaces.into_iter().filter(|iface| !iface.is_loopback() && !iface.ips.is_empty()).collect();
-        
+        let mut candidates: Vec<_> = interfaces
+            .into_iter()
+            .filter(|iface| !iface.is_loopback() && !iface.ips.is_empty())
+            .collect();
+
         // Sort to prefer "Wi-Fi" or "Ethernet" in name if possible (Windows specific heuristic)
         candidates.sort_by(|a, b| {
-            let a_score = if a.name.to_lowercase().contains("wi-fi") { 2 } else if a.name.to_lowercase().contains("ethernet") { 1 } else { 0 };
-            let b_score = if b.name.to_lowercase().contains("wi-fi") { 2 } else if b.name.to_lowercase().contains("ethernet") { 1 } else { 0 };
+            let a_score = if a.name.to_lowercase().contains("wi-fi") {
+                2
+            } else if a.name.to_lowercase().contains("ethernet") {
+                1
+            } else {
+                0
+            };
+            let b_score = if b.name.to_lowercase().contains("wi-fi") {
+                2
+            } else if b.name.to_lowercase().contains("ethernet") {
+                1
+            } else {
+                0
+            };
             b_score.cmp(&a_score)
         });
 
@@ -122,7 +142,7 @@ async fn run_sniffer_loop(
     tokio::task::spawn_blocking(move || {
         let mut rx = channel;
         eprintln!("[apex_core] Capture loop started. Waiting for packets...");
-        
+
         while let Ok(frame) = rx.next() {
             let Some(packet) = parse_packet(frame, &local_ips, &process_cache) else {
                 continue;
@@ -155,7 +175,11 @@ async fn run_sniffer_loop(
 }
 
 #[cfg(feature = "packet-capture")]
-fn parse_packet(frame: &[u8], local_ips: &HashSet<IpAddr>, process_cache: &ProcessCache) -> Option<CapturedPacket> {
+fn parse_packet(
+    frame: &[u8],
+    local_ips: &HashSet<IpAddr>,
+    process_cache: &ProcessCache,
+) -> Option<CapturedPacket> {
     let ethernet = EthernetPacket::new(frame)?;
     let ts = SystemTime::now()
         .duration_since(UNIX_EPOCH)
@@ -168,7 +192,8 @@ fn parse_packet(frame: &[u8], local_ips: &HashSet<IpAddr>, process_cache: &Proce
             let local = IpAddr::V4(ipv4.get_source());
             let remote = IpAddr::V4(ipv4.get_destination());
             let outbound = local_ips.contains(&local);
-            let (protocol, local_addr, remote_addr, local_port) = transport_details_v4(&ipv4, local, remote);
+            let (protocol, local_addr, remote_addr, local_port) =
+                transport_details_v4(&ipv4, local, remote);
 
             Some(CapturedPacket {
                 process: resolve_process_label(&protocol, local_port, process_cache),
@@ -185,7 +210,8 @@ fn parse_packet(frame: &[u8], local_ips: &HashSet<IpAddr>, process_cache: &Proce
             let local = IpAddr::V6(ipv6.get_source());
             let remote = IpAddr::V6(ipv6.get_destination());
             let outbound = local_ips.contains(&local);
-            let (protocol, local_addr, remote_addr, local_port) = transport_details_v6(&ipv6, local, remote);
+            let (protocol, local_addr, remote_addr, local_port) =
+                transport_details_v6(&ipv6, local, remote);
 
             Some(CapturedPacket {
                 process: resolve_process_label(&protocol, local_port, process_cache),
@@ -298,18 +324,22 @@ fn transport_details_v6(
 }
 
 #[cfg(feature = "packet-capture")]
-fn resolve_process_label(protocol: &str, local_port: Option<u16>, process_cache: &ProcessCache) -> CompactString {
+fn resolve_process_label(
+    protocol: &str,
+    local_port: Option<u16>,
+    process_cache: &ProcessCache,
+) -> CompactString {
     if let Some(port) = local_port {
         let proto_num = match protocol {
             "TCP" => 6,
             "UDP" => 17,
             _ => 0,
         };
-        
+
         if proto_num > 0 {
-             if let Some(name) = process_cache.get_process_name(proto_num, port) {
-                 return name;
-             }
+            if let Some(name) = process_cache.get_process_name(proto_num, port) {
+                return name;
+            }
         }
     }
 
@@ -317,10 +347,10 @@ fn resolve_process_label(protocol: &str, local_port: Option<u16>, process_cache:
     {
         // If we have a port but couldn't resolve it, try to return pending info
         if local_port.is_some() {
-             // Optional: Return "System" or "Unknown" as requested, 
-             // but keeping useful debug info might be better. 
-             // User requested: "If not found, default to 'System' or 'Unknown'."
-             return CompactString::from("Unknown");
+            // Optional: Return "System" or "Unknown" as requested,
+            // but keeping useful debug info might be better.
+            // User requested: "If not found, default to 'System' or 'Unknown'."
+            return CompactString::from("Unknown");
         }
         CompactString::from("System")
     }

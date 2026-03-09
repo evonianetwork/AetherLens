@@ -1,8 +1,8 @@
 #![allow(dead_code)]
+use compact_str::CompactString;
 use dashmap::DashMap;
 use std::sync::Arc;
 use tokio::time::{sleep, Duration};
-use compact_str::CompactString;
 
 #[cfg(windows)]
 use std::ffi::c_void;
@@ -10,15 +10,17 @@ use std::ffi::c_void;
 use windows_sys::Win32::Foundation::{CloseHandle, FALSE};
 #[cfg(windows)]
 use windows_sys::Win32::NetworkManagement::IpHelper::{
-    GetExtendedTcpTable, GetExtendedUdpTable, TCP_TABLE_OWNER_PID_ALL, UDP_TABLE_OWNER_PID,
-    MIB_TCPTABLE_OWNER_PID, MIB_UDPTABLE_OWNER_PID, MIB_TCPROW_OWNER_PID, MIB_UDPROW_OWNER_PID,
+    GetExtendedTcpTable, GetExtendedUdpTable, MIB_TCPROW_OWNER_PID, MIB_TCPTABLE_OWNER_PID,
+    MIB_UDPROW_OWNER_PID, MIB_UDPTABLE_OWNER_PID, TCP_TABLE_OWNER_PID_ALL, UDP_TABLE_OWNER_PID,
 };
+#[cfg(windows)]
+use windows_sys::Win32::Networking::WinSock::AF_INET;
 #[cfg(windows)]
 use windows_sys::Win32::System::ProcessStatus::GetModuleBaseNameA;
 #[cfg(windows)]
-use windows_sys::Win32::System::Threading::{OpenProcess, PROCESS_QUERY_INFORMATION, PROCESS_VM_READ};
-#[cfg(windows)]
-use windows_sys::Win32::Networking::WinSock::AF_INET;
+use windows_sys::Win32::System::Threading::{
+    OpenProcess, PROCESS_QUERY_INFORMATION, PROCESS_VM_READ,
+};
 
 #[derive(Clone)]
 pub struct ProcessCache {
@@ -40,7 +42,7 @@ impl ProcessCache {
             loop {
                 #[cfg(windows)]
                 cache.refresh_windows();
-                
+
                 sleep(Duration::from_secs(2)).await;
             }
         });
@@ -103,7 +105,7 @@ impl ProcessCache {
             for row in rows {
                 let port = u16::from_be(row.dwLocalPort as u16);
                 let pid = row.dwOwningPid;
-                
+
                 if pid > 0 {
                     self.port_map.insert((6, port), pid);
                     if !self.name_cache.contains_key(&pid) {
@@ -151,7 +153,7 @@ impl ProcessCache {
             for row in rows {
                 let port = u16::from_be(row.dwLocalPort as u16);
                 let pid = row.dwOwningPid;
-                
+
                 if pid > 0 {
                     self.port_map.insert((17, port), pid);
                     if !self.name_cache.contains_key(&pid) {
@@ -174,7 +176,12 @@ fn get_process_name_by_pid(pid: u32) -> Option<String> {
         }
 
         let mut buffer = [0u8; 1024];
-        let len = GetModuleBaseNameA(handle, std::ptr::null_mut(), buffer.as_mut_ptr(), buffer.len() as u32);
+        let len = GetModuleBaseNameA(
+            handle,
+            std::ptr::null_mut(),
+            buffer.as_mut_ptr(),
+            buffer.len() as u32,
+        );
         CloseHandle(handle);
 
         if len > 0 {
